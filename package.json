@@ -1,0 +1,29 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index",
+    "start": "node index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@michpl/telegram-calendar": "^1.0.1",
+    "axios": "^0.26.0",
+    "dotenv": "^16.0.0",
+    "grammy-inline-menu": "^7.0.2",
+    "i": "^0.3.7",
+    "i18n": "^0.14.1",
+    "nodemon": "^2.0.15",
+    "npm": "^8.5.0",
+    "quickchart-js": "^3.0.0",
+    "telegraf": "3.39",
+    "telegraf-calendar-telegram": "^1.5.8",
+    "telegraf-i18n": "^6.6.0",
+    "telegram-keyboard": "^2.3.0",
+    "uuid": "^8.3.2"
+  }
+}
