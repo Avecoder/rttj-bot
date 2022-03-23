@@ -23,6 +23,7 @@
     "telegraf": "3.39",
     "telegraf-calendar-telegram": "^1.5.8",
     "telegraf-i18n": "^6.6.0",
+    "telegram-bot-calendar": "^1.0.7",
     "telegram-keyboard": "^2.3.0",
     "uuid": "^8.3.2"
   }

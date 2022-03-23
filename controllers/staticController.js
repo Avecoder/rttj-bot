@@ -1,8 +1,9 @@
 const axios = require('axios')
-const QuickChart = require('quickchart-js');
+const QuickChart = require('quickchart-js')
 
 const lineChart = require('../charts/lineChart')
 const radarChart = require('../charts/radarChart')
+const dateAssets = require('../assets/dateAssets')
 
 class StaticController {
   async static(ctx) {
@@ -10,14 +11,12 @@ class StaticController {
       const today = new Date()
       const lastWeekDay = new Date(today.getTime() - 1000*60*60*24*7)
 
-      const pad = (s) => ('00' + s).slice(-2)
-
-      const data = await axios.post(`${process.env.mainUrl}/data`, {
-        firstDate: `${lastWeekDay.getFullYear()}-${pad(lastWeekDay.getMonth()+1)}-${pad(lastWeekDay.getDate())}`,
-        secondDate: `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`,
-        userID: ctx.update.message.from.id
+      const res = await axios.post(`${process.env.mainUrl}/data`, {
+        firstDate: dateAssets.dashDate(lastWeekDay),
+        secondDate: dateAssets.dashDate(today),
+        userID: ctx.update.callback_query.from.id
       })
-      return data.data
+      return res.data
     } catch (e) {
       console.log(e);
     }
@@ -36,9 +35,8 @@ class StaticController {
     })
     .setWidth(1200)
     .setHeight(700)
-    .setBackgroundColor('#0F0D22')
+    .setBackgroundColor('#0D0D0D')
 
-    // console.log(lineChart.data);
     return myChart.getUrl()
   }
 
@@ -47,15 +45,14 @@ class StaticController {
       const today = new Date()
       const lastWeekDay = new Date(today.getTime() - 1000*60*60*24*14)
 
-      const pad = (s) => ('00' + s).slice(-2)
 
-      const data = await axios.post(`${process.env.mainUrl}/data-all`, {
-        firstDate: `${lastWeekDay.getFullYear()}-${pad(lastWeekDay.getMonth()+1)}-${pad(lastWeekDay.getDate())}`,
-        secondDate: `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`,
-        userID: ctx.update.message.from.id
+      const res = await axios.post(`${process.env.mainUrl}/data-all`, {
+        firstDate: dateAssets.dashDate(lastWeekDay),
+        secondDate: dateAssets.dashDate(today),
+        userID: ctx.update.callback_query.from.id
       })
 
-      return data.data
+      return res.data
     } catch (e) {
       console.log(e)
     }
@@ -77,9 +74,8 @@ class StaticController {
       })
       .setWidth(1300)
       .setHeight(1300)
-      .setBackgroundColor('#0F0D22')
+      .setBackgroundColor('#0D0D0D')
 
-      // console.log(lineChart.data);
       return myChart.getUrl()
     } catch(e) {
       console.log(e)
@@ -88,11 +84,9 @@ class StaticController {
 
   async dateStatic(ctx) {
     try {
-      const today = new Date('2022-02-24')
-      const pad = (s) => ('00' + s).slice(-2)
-      const data = await axios.get(`${process.env.mainUrl}/get-task-date/${ctx.update.message.from.id}/${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`)
+      const res = await axios.get(`${process.env.mainUrl}/get-task-date/${ctx.update.callback_query.from.id}/${dateAssets.dashDate(new Date())}`)
 
-      return data.data
+      return res.data
     } catch (e) {
       console.log(e)
     }

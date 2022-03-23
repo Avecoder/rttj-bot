@@ -4,12 +4,11 @@ welcome: |
 
 
 help: |
-  /ui - Веб версия приложения
-  /static - Твоя статистика за неделю
-  /statictoday - Твоя статистика за сегодня
-  /allstatic - Статистика всей группы
-  /startlearn - Начать заниматься
-  /tasks - Проставить задания
+  /tasks - Добавить задания или начать заниматься
+  /static - Просмотреть статистику
+  /ui - Открыть веб-приложение
+  /info - Информация о тебе
+
 
 
 UI: |
@@ -105,3 +104,29 @@ warningAllStatic: |
 todayStaticInf: |
   Сегодня ты занимался:
   ${outputData}
+
+
+plannedTaskItem: |
+  <b>Тематика:</b> ${item.label}
+  <b>Дата:</b> ${item.date}
+  <b>Запланированное время:</b> ${item.hours}
+
+
+plannedTaskSuccess: |
+  Запланированное задание добавлено.
+  Вернуться в сцену с заданиями: /tasks
+
+
+userInfo: |
+  <b>Твое имя:</b> ${user.username}
+  <b>Статус:</b> ${user.substatus}
+  <b>Часов прозанимался:</b> ${user.hours}
+
+
+bannedMessgage: |
+  Иди нахуй, ты забанен.
+
+userItem: |
+  <b>Имя:</b> ${user.username}
+  <b>Статус:</b> ${user.substatus}
+  <b>Сколько всего прозанимался:</b> ${user.hours}

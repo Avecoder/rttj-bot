@@ -34,7 +34,7 @@ const options = {
           stepSize: 1
         },
         gridLines: {
-          color: '#0F0D22'
+          color: 'transparent'
         },
       },
     ],
@@ -48,7 +48,7 @@ const options = {
           fontWeigth: 200
         },
         gridLines: {
-          color: '#0F0D22'
+          color: '#323232'
         },
       },
 

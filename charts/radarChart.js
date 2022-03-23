@@ -38,7 +38,7 @@ const options = {
       stepSize: 5,
       fontSize: 24,
       fontColor: '#fff',
-      backdropColor: '#0F0D22'
+      backdropColor: '#0d0d0d'
     },
     angleLines: {
       color: '#fff5',
@@ -55,7 +55,7 @@ const options = {
       fontColor: '#fff',
       fontSize: 24,
       padding: 28,
-      backgroundColor: '#0F0D22'
+      backgroundColor: '#323232'
     }
   },
   plugins: {

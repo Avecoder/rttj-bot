@@ -1,34 +1,38 @@
 const WizardScene = require('telegraf/scenes/wizard')
-const Extra = require('telegraf/extra')
-const Markup = require('telegraf/markup')
-const Calendar = require('telegraf-calendar-telegram')
+const {Calendar} = require('@michpl/telegram-calendar')
+const keyboard = require('../assets/keyboard')
+const dateAssets = require('../assets/dateAssets')
 
 
+
+const currentMonth = new Date()
+
+
+const calendar = new Calendar({
+  weekDayNames: [
+    'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'
+  ],
+  monthNames: [
+    'Янв', 'Фев', 'Мар', 
+    'Апр', 'Май', 'Июн', 
+    'Июл', 'Авг', 'Сен', 
+    'Окт', 'Ноя', 'Дек'
+  ],
+  minDate: dateAssets.dashDate(new Date())
+})
 
 
 module.exports = new WizardScene(
   'putDownTasks',
-  async (ctx, bot) => {
+  async ctx => {
     try {
-      const today = new Date();
-    	const minDate = new Date();
-    	minDate.setMonth(today.getMonth() - 2);
-    	const maxDate = new Date();
-    	maxDate.setMonth(today.getMonth() + 2);
-    	maxDate.setDate(today.getDate());
-      const calendar = new Calendar(bot, {
-      	startWeekDay: 1,
-      	weekDayNames: ["L", "M", "M", "G", "V", "S", "D"],
-      	monthNames: [
-      		"Gen", "Feb", "Mar", "Apr", "Mag", "Giu",
-      		"Lug", "Ago", "Set", "Ott", "Nov", "Dic"
-      	]
+      
+      await ctx.editMessageText('Выбери дату', {
+        parse_mode: 'html',
+        reply_markup: JSON.stringify({
+          inline_keyboard: calendar.getPage(currentMonth)
+        })
       })
-
-      // console.log(bot)
-      // console.log(ctx)
-      calendar.setDateListener((context, date) => context.reply(date));
-      await ctx.reply('good', calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar())
 
       return ctx.wizard.next()
     } catch(e) {
@@ -37,7 +41,33 @@ module.exports = new WizardScene(
   },
   async ctx => {
     try {
-
+      const data = JSON.parse(ctx.update.callback_query.data)
+      if(data.action === 'prev-month') {
+        currentMonth.setMonth(currentMonth.getMonth() - 1)
+        return ctx.scene.reenter()
+      }
+      if(data.action === 'next-month') {
+        currentMonth.setMonth(currentMonth.getMonth() + 1)
+        return ctx.scene.reenter()
+      }
+      if(data.action === null && data.date !== 0) {
+        ctx.session.currentDate = data.date
+        await ctx.editMessageText(`Ок, ты будешь заниматься ${data.date}, но сколько часов?`,{ 
+          reply_markup: keyboard.hours
+        })
+        return ctx.wizard.next()
+      }  
+    } catch(e) {
+      console.log(e)
+    }
+  },
+  async ctx => {
+    try {
+      if(ctx.update.callback_query.data === 'change_date') {
+        return ctx.scene.reenter()
+      }
+      ctx.session.allTime = ctx.update.callback_query.data
+      return ctx.scene.enter('addPlannedTask')
     } catch(e) {
       console.log(e)
     }

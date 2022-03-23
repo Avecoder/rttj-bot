@@ -14,7 +14,7 @@ composer.command('ui', async ctx => {
       {
        reply_markup: {
            inline_keyboard: [
-               [ { text: "Перейти", url: `https://egorvar.github.io/` } ]
+               [ { text: "Перейти", url: `https://avecoder.github.io/` } ]
            ]
        }
      }
