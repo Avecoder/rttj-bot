@@ -2,6 +2,12 @@ require('dotenv').config()
 
 const { Telegraf, Stage, session } = require('telegraf')
 
+const express = require('express')
+const expressApp = express()
+
+const port = 3000
+
+
 
 const TelegrafI18n = require('telegraf-i18n')
 const path = require('path')
@@ -74,8 +80,13 @@ bot.use(require('./composers/staticComposer'))
 bot.use(require('./composers/userComposer'))
 bot.use(require('./composers/adminComposer'))
 
-bot.on('sticker', (ctx) => console.log(ctx))
-bot.on('image', (ctx) => console.log(ctx.update))
+
+expressApp.get('/', (req, res) => {
+  res.send(`Bot started on https://t.me/${bot.options.username}`)
+})
+expressApp.listen(port, () => {
+  console.log(`Listening on port ${port}`)
+})
 
 bot.launch().then(() => {
 	console.log(`bot started on @${bot.options.username}`)
