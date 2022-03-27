@@ -3,6 +3,7 @@ require('dotenv').config()
 const { Telegraf, Stage, session } = require('telegraf')
 
 const express = require('express')
+const cors = require('cors')
 const expressApp = express()
 
 const port = 3000
@@ -80,6 +81,15 @@ bot.use(require('./composers/staticComposer'))
 bot.use(require('./composers/userComposer'))
 bot.use(require('./composers/adminComposer'))
 
+
+expressApp.use(cors())
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
+    next()
+})
 
 expressApp.get('/', (req, res) => {
   res.send(`Bot started on https://t.me/${bot.options.username}`)
