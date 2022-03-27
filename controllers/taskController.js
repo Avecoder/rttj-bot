@@ -13,9 +13,11 @@ class TaskController {
 
       let taskToday = await axios.get(`${process.env.mainUrl}/get-task-date/${ctx.update.callback_query.from.id}/${currentDate}`)
 
-      const markup = taskToday.data.map(task => {
-        return Markup.callbackButton(task.label, task.taskID)
+      let markup = taskToday.data.map(task => {
+        return {text: task.label, callback_data: task.taskID}
       })
+
+      markup = await markup.map((_, i, a) => a.slice(i * 2, i * 2 + 2)).filter((el) => el.length)
 
       taskToday = taskToday.data
 
@@ -31,17 +33,14 @@ class TaskController {
 
   async addHoursTask(ctx) {
     try {
-        const data = await axios.post(`${process.env.mainUrl}/add-today-task`, {
+      console.log(`HOURS - ${ctx.session.allTime}`)
+      const res = await axios.post(`${process.env.mainUrl}/add-today-task`, {
         taskID: ctx.update.callback_query.data,
-        hours: ctx.session.allTime
+        hours: parseFloat(ctx.session.allTime)
       })
 
-      const task = data.data
-      console.log(task.newTask)
+      return res.data
 
-      await ctx.reply(ctx.i18n.t('taskTodayCompletedTrue', {task}))
-
-      return ctx.scene.leave()
     } catch(e) {
       console.log(e)
     }
@@ -51,15 +50,10 @@ class TaskController {
     try {
         const data = await axios.post(`${process.env.mainUrl}/complete-today-task`, {
         taskID: ctx.update.callback_query.data,
-        hours: ctx.session.allTime
+        hours: parseFloat(ctx.session.allTime)
       })
 
-      const task = data.data
-      console.log(task.newTask)
-
-      await ctx.reply(ctx.i18n.t('taskTodayUncompletedTrue', {task, ctx}))
-
-      return ctx.scene.leave()
+      return data.data
     } catch(e) {
       console.log(e)
     }
@@ -71,7 +65,7 @@ class TaskController {
 
       const data = await axios.post(`${process.env.mainUrl}/add-task`, {
         label: ctx.session.taskLabel,
-        hours: ctx.session.allTime,
+        hours: parseFloat(ctx.session.allTime),
         isCompleted: true,
         userID: ctx.update.callback_query.from.id,
         date: dateAssets.dashDate(d)
@@ -133,6 +127,15 @@ class TaskController {
     } catch(e) {
       console.log(e)
     }
+  }
+
+  async deletePlannedTask(ctx) {
+    const res = await axios.post(`${process.env.mainUrl}/delete-task`, {
+      userID: ctx.from.id,
+      taskID: ctx.session.currentTask.taskID
+    })
+
+    return res.data
   }
 }
 
