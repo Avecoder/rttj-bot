@@ -71,6 +71,8 @@ module.exports = new WizardScene(
           return ctx.scene.enter('taskScenes')
         }
 
+        ctx.session.allTime = allTime
+
 
         return ctx.scene.enter('checkTaskToday')
       }

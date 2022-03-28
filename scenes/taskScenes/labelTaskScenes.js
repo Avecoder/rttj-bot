@@ -30,7 +30,7 @@ module.exports = new WizardScene(
         })
 
         return ctx.wizard.next()
-      }
+      } 
       return false
     } catch(e) {
       console.log(e);
@@ -42,6 +42,8 @@ module.exports = new WizardScene(
       if(data === 'no') {
         return ctx.scene.reenter()
       }
+
+      console.log(ctx.session.allTime)
 
       if(data === 'yes') {
         await ctx.editMessageText(ctx.i18n.t('finalTask', {ctx}))
