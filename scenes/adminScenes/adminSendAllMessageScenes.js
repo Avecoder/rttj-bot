@@ -44,7 +44,12 @@ module.exports = new WizardScene(
           await ctx.telegram.sendMessage(userID, allMessage, {parse_mode: 'html'})
         }
 
-        await ctx.reply('Сообщение отправлено успешно.')
+        await ctx.reply('Сообщение отправлено успешно.', {
+          reply_markup: JSON.stringify({
+            inline_keyboard: [[{text: 'Вернуться назад', callback_data: 'back'}]]
+          })
+
+        })
         return ctx.scene.reenter()
       }
 
