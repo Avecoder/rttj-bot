@@ -63,9 +63,8 @@ module.exports = new WizardScene(
       if(data === 'endLearn') {
         const time = new Date()
 
-        const allTime = ((time - ctx.session.first) / (1000 * 60 * 60))
+        const allTime = ((time - ctx.session.first) / (1000 * 60 * 60)).toFixed(1)
 
-        await ctx.reply(`ALL TIME - ${allTime}`)
 
         if(allTime < 0.5) {
           await ctx.editMessageText(ctx.i18n.t('errorTask'))
@@ -73,7 +72,7 @@ module.exports = new WizardScene(
           return ctx.scene.enter('taskScenes')
         }
 
-        ctx.session.allTime = allTime.toFixed(1)
+        ctx.session.allTime = allTime
 
         
         return ctx.scene.enter('checkTaskToday')

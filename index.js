@@ -61,6 +61,7 @@ bot.use(session())
 bot.use(i18n.middleware())
 bot.use(stage.middleware())
 
+bot.use(require('./middlewares/unnamedMiddleware'))
 bot.use(require('./middlewares/adminMiddleware'))
 bot.use(require('./middlewares/userMiddleware'))
 
