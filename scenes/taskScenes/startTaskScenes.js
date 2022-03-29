@@ -28,8 +28,7 @@ module.exports = new WizardScene(
       const data = ctx.update?.callback_query?.data
       // Проверяем, что начали занятие
       if(data === 'startLearn') {
-        const time = new Date()
-        ctx.session.first = time.getMinutes()
+        ctx.session.first = new Date()
         // Выводим сообщение о завершении занятия
   			await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
           reply_markup: JSON.stringify({
@@ -63,7 +62,10 @@ module.exports = new WizardScene(
 
       if(data === 'endLearn') {
         const time = new Date()
-        const allTime = ((time.getMinutes() - ctx.session.first) / 60).toFixed(1)
+
+        const allTime = ((time - ctx.session.first) / (1000 * 60 * 60))
+
+        await ctx.reply(`ALL TIME - ${allTime}`)
 
         if(allTime < 0.5) {
           await ctx.editMessageText(ctx.i18n.t('errorTask'))
@@ -71,9 +73,9 @@ module.exports = new WizardScene(
           return ctx.scene.enter('taskScenes')
         }
 
-        ctx.session.allTime = allTime
+        ctx.session.allTime = allTime.toFixed(1)
 
-
+        
         return ctx.scene.enter('checkTaskToday')
       }
 
