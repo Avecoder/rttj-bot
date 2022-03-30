@@ -6,14 +6,19 @@ const composer = new Composer()
 
 composer.command('start', async ctx => {
 	try {
-		await ctx.replyWithHTML(ctx.i18n.t('welcome', {ctx}))
 
-    	const data = await axios.post(`${process.env.mainUrl}/login`, {
+    const res = await axios.post(`${process.env.mainUrl}/login`, {
 			userID: ctx.update.message.from.id,
 			username: ctx.update.message.from.username
 		})
 
-	
+		if(res.data.userStatus === 'alreadyLogin') {
+			return ctx.reply(`Ты уже зареган`)
+		}
+
+		await ctx.replyWithHTML(ctx.i18n.t('welcome', {ctx}))
+
+
 	} catch (e) {
 		console.error('cant handle help command', e)
 	}
