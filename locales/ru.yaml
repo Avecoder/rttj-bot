@@ -116,7 +116,7 @@ plannedTaskSuccess: |
 userInfo: |
   <b>Твое имя:</b> ${user.username}
   <b>Статус:</b> ${user.substatus}
-  <b>Часов прозанимался:</b> ${user.hours}
+  <b>Часов прозанимался:</b> ${user.hours.toFixed(1)}ч.
 
 
 bannedMessgage: |
@@ -125,7 +125,7 @@ bannedMessgage: |
 userItem: |
   <b>Имя:</b> ${user.username}
   <b>Статус:</b> ${user.substatus}
-  <b>Сколько всего прозанимался:</b> ${user.hours}
+  <b>Сколько всего прозанимался:</b> ${user.hours.toFixed(1)}ч.
 
 
 adminOutput: |

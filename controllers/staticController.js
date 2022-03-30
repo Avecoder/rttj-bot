@@ -86,7 +86,14 @@ class StaticController {
     try {
       const res = await axios.get(`${process.env.mainUrl}/get-task-date/${ctx.update.callback_query.from.id}/${dateAssets.dashDate(new Date())}`)
 
-      return res.data
+      return res.data.map(item => {
+        return {
+          label: item.label,
+          hours: (item.hours).toFixed(1),
+          date: dateAssets.dMDate(item.date),
+          taskID: item.taskID
+        }
+      })
     } catch (e) {
       console.log(e)
     }

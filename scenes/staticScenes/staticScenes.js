@@ -30,7 +30,7 @@ module.exports = new WizardScene(
 
         const weekInf = await yourStatic.filter(item => item.label !== undefined).map(item => {
           return {
-            hours: item.hours,
+            hours: (item.hours).toFixed(1),
             date: dateAssets.dMDate(item.date),
             label: item.label
           }
@@ -48,7 +48,7 @@ module.exports = new WizardScene(
 
         console.log(yourStatic)
 
-        const sumHours = chartHours.reduce((prev, curr) => prev + curr)
+        const sumHours = chartHours.reduce((prev, curr) => prev + curr).toFixed(1)
         const url = await staticController.getLineChart(chartLabels, chartHours)
 
 
@@ -72,6 +72,8 @@ module.exports = new WizardScene(
         await ctx.editMessageText(ctx.i18n.t('warningAllStatic'))
         let all = await staticController.allStatic(ctx)
 
+        // console.log(all)
+
         all = all.filter(item => item.status !== 'BANNED')
 
         const chartLabels= all.map(item => item.username)
@@ -84,6 +86,9 @@ module.exports = new WizardScene(
         await ctx.editMessageText('<b>Статистика всех</b>', {parse_mode: 'html'})
 
         for(let item of all) {
+
+          item.data[0] = item.data[0].toFixed(1)
+          item.data[1] = item.data[1].toFixed(1)
           await ctx.replyWithHTML(ctx.i18n.t('friendStaticItem', {item}))
         }
 
@@ -107,6 +112,7 @@ module.exports = new WizardScene(
 
         for(let i = 0; i < today.length; i++) {
           let item = today[i]
+          console.log(item)
           if(i === (today.length - 1)) {
             await ctx.replyWithHTML(ctx.i18n.t('todayStaticItem', {item}), {
               reply_markup: JSON.stringify({

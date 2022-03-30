@@ -34,7 +34,6 @@ const options = {
   scale: {
     ticks: {
       suggestedMin: 0,
-      suggestedMax: 30,
       stepSize: 5,
       fontSize: 24,
       fontColor: '#fff',
