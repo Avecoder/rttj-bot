@@ -46,7 +46,6 @@ module.exports = new WizardScene(
         const chartLabels = await yourStatic.map(item => item.date.substr(5, 5))
         const chartHours = await yourStatic.map(item => item.hours)
 
-        console.log(yourStatic)
 
         const sumHours = chartHours.reduce((prev, curr) => prev + curr).toFixed(1)
         const url = await staticController.getLineChart(chartLabels, chartHours)
@@ -72,7 +71,6 @@ module.exports = new WizardScene(
         await ctx.editMessageText(ctx.i18n.t('warningAllStatic'))
         let all = await staticController.allStatic(ctx)
 
-        // console.log(all)
 
         all = all.filter(item => item.status !== 'BANNED')
 
@@ -85,8 +83,12 @@ module.exports = new WizardScene(
 
         await ctx.editMessageText('<b>Статистика всех</b>', {parse_mode: 'html'})
 
+        if(all.length < 2) {
+          await ctx.reply('У тебя нет друзей')
+          return ctx.scene.reenter()
+        } 
+        
         for(let item of all) {
-
           item.data[0] = item.data[0].toFixed(1)
           item.data[1] = item.data[1].toFixed(1)
           await ctx.replyWithHTML(ctx.i18n.t('friendStaticItem', {item}))
@@ -101,7 +103,8 @@ module.exports = new WizardScene(
       }
 
       if(data === 'today_static') {
-        const today = await staticController.dateStatic(ctx)
+        let today = await staticController.dateStatic(ctx)
+        today = today.filter(item => item.isCompleted)
 
         if(today.length === 0) {
           await ctx.editMessageText('Сегодня ты ничего не делал.', {
