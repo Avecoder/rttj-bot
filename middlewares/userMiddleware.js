@@ -4,7 +4,6 @@ const fs = require('fs')
 
 
 const userMiddleware = async (ctx, next) => {
-	// const message = ctx.update?.message?.text[0] || ctx.update?.message?.text
 
 	if(ctx.update?.message?.text && ctx.update?.message?.text[0] === '/') {
 		const userInfo = await axios.get(`${process.env.mainUrl}/info/${ctx.update.message.from.id}`)
