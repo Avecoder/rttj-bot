@@ -47,7 +47,7 @@ module.exports = new WizardScene(
         const user = await userController.getInfo(data)
 
         ctx.session.currentFriendUser = user.userID
-        await ctx.reply(ctx.i18n.t('friendListItem', {user}), {
+        await ctx.editMessageText(ctx.i18n.t('friendListItem', {user}), {
           reply_markup: JSON.stringify({
             inline_keyboard: [
               [

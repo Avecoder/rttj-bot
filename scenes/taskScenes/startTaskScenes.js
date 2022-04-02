@@ -1,4 +1,5 @@
 const WizardScene = require('telegraf/scenes/wizard')
+const userController = require('../../controllers/userController')
 
 
 
@@ -29,6 +30,7 @@ module.exports = new WizardScene(
       // Проверяем, что начали занятие
       if(data === 'startLearn') {
         ctx.session.first = new Date()
+        await userController.changeActivity(ctx.from.id)
         // Выводим сообщение о завершении занятия
   			await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
           reply_markup: JSON.stringify({
@@ -57,6 +59,7 @@ module.exports = new WizardScene(
       const data = ctx.update?.callback_query?.data
       if(data === 'back') {
         await ctx.deleteMessage(ctx.session.startMessageID)
+        await userController.changeActivity(ctx.from.id)
         return ctx.scene.enter('taskScenes')
       }
 
@@ -64,6 +67,8 @@ module.exports = new WizardScene(
         const time = new Date()
 
         const allTime = ((time - ctx.session.first) / (1000 * 60 * 60)).toFixed(1)
+
+        await userController.changeActivity(ctx.from.id)
 
 
         if(allTime < 0.5) {
@@ -74,7 +79,7 @@ module.exports = new WizardScene(
 
         ctx.session.allTime = allTime
 
-        
+
         return ctx.scene.enter('checkTaskToday')
       }
 

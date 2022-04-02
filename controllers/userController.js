@@ -81,6 +81,16 @@ class UserController {
 			console.log(e)
 		}
 	}
+
+	async changeActivity(userID) {
+		try {
+			await axios.post(`${process.env.mainUrl}/change-activity`, {
+				userID
+			})
+		} catch (e) {
+			console.log(e)
+		}
+	}
 }
 
 module.exports = new UserController()
