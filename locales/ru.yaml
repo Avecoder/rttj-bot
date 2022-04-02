@@ -140,7 +140,7 @@ friendStaticItem: |
   <b>${item.username}</b>
   🟢Текущая неделя: ${item.data[0]}ч.
   🔴Прошлая неделя: ${item.data[1]}ч.
-  🕑Суммарное время: ${item.hours.toFixed(1)}
+  🕑Суммарное время: ${item.hours.toFixed(1)}ч.
 
 todayStaticItem: |
   <b>${item.label}</b>
