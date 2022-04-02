@@ -12,7 +12,7 @@ composer.command('start', async ctx => {
 			username: ctx.update.message.from.username
 		})
 
-		if(res.data.userStatus === 'alreadyLogin') {
+		if(res.data.candidate) {
 			return ctx.reply(`Ты уже зареган`)
 		}
 
