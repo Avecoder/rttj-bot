@@ -26,6 +26,13 @@ module.exports = new WizardScene(
         })
 
         ctx.session.friendListMessageID = message_id
+
+      } else {
+        await ctx.reply('У тебя нет друзей', {
+          reply_markup: JSON.stringify({
+            inline_keyboard: [[{text: 'Вернуться назад', callback_data: 'back_to_main'}]]
+          })
+        })
       }
 
       return ctx.wizard.next()
