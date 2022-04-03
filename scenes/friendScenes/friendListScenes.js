@@ -43,6 +43,10 @@ module.exports = new WizardScene(
   async ctx => {
     try {
 
+      const text = ctx.update?.message?.text
+
+      if(text) return false
+
       const data = ctx.update?.callback_query?.data
 
       if(data === 'back_to_main') {
