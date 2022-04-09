@@ -84,8 +84,8 @@ class StaticController {
 
   async dateStatic(ctx) {
     try {
-      const res = await axios.get(`${process.env.mainUrl}/get-task-date/${ctx.update.callback_query.from.id}/${dateAssets.dashDate(new Date())}`)
-
+      const res = await axios.get(`${process.env.mainUrl}/get-task-date/${ctx.from.id}/${dateAssets.dashDate(new Date())}`)
+      console.log(`${process.env.mainUrl}/get-task-date/${ctx.from.id}/${dateAssets.dashDate(new Date())}`)
       return res.data.map(item => {
         return {
           label: item.label,

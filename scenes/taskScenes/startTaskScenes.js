@@ -71,11 +71,11 @@ module.exports = new WizardScene(
         await userController.changeActivity(ctx.from.id)
 
 
-        if(allTime < 0.5) {
-          await ctx.editMessageText(ctx.i18n.t('errorTask'))
-          await ctx.replyWithSticker('CAACAgIAAxkBAAEER41iP7tQ0thyzRpgD0Cn_M12nR5SVAACRA0AAlqPsUmvCoOB9MD71iME')
-          return ctx.scene.enter('taskScenes')
-        }
+        // if(allTime < 0.5) {
+        //   await ctx.editMessageText(ctx.i18n.t('errorTask'))
+        //   await ctx.replyWithSticker('CAACAgIAAxkBAAEER41iP7tQ0thyzRpgD0Cn_M12nR5SVAACRA0AAlqPsUmvCoOB9MD71iME')
+        //   return ctx.scene.enter('taskScenes')
+        // }
 
         ctx.session.allTime = allTime
 

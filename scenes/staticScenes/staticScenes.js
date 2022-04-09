@@ -36,12 +36,18 @@ module.exports = new WizardScene(
           }
         })
 
-        yourStatic.forEach((item, i) => {
-          if(item.date === yourStatic[i - 1]?.date) {
-            item.hours += yourStatic[i - 1]?.hours
-            yourStatic.splice(i - 1, 1)
+
+        const mergeDataset = arr => {
+          for(let [i, item] of arr.entries()) {
+              if(item.date === arr[i - 1]?.date) {
+                item.hours += arr[i - 1]?.hours
+                arr.splice(i - 1, 1)
+              }
           }
-        })
+          return arr
+        }
+
+        while(yourStatic.length > 7) userDataset = mergeDataset(yourStatic)
 
         const chartLabels = await yourStatic.map(item => item.date.substr(5, 5))
         const chartHours = await yourStatic.map(item => item.hours)
@@ -86,8 +92,8 @@ module.exports = new WizardScene(
         if(all.length < 2) {
           await ctx.reply('У тебя нет друзей')
           return ctx.scene.reenter()
-        } 
-        
+        }
+
         for(let item of all) {
           item.data[0] = item.data[0].toFixed(1)
           item.data[1] = item.data[1].toFixed(1)

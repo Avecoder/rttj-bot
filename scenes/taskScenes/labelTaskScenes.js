@@ -11,7 +11,7 @@ module.exports = new WizardScene(
   async ctx => {
     try {
       // Отправляем сообщение с просьбой написать тему занятия
-      await ctx.editMessageText(ctx.i18n.t('taskLabel', {ctx}))
+      await ctx.editMessageText(ctx.i18n.t('taskLabel', {ctx}), {parse_mode: 'html'})
       // Следующая сцена
       return ctx.wizard.next()
     } catch(e) {
@@ -22,7 +22,7 @@ module.exports = new WizardScene(
     try {
       const label = ctx.update?.message?.text
 
-      if(label) {
+      if(label && label.length >= 2) {
         ctx.session.taskLabel = label
 
         await ctx.reply(ctx.i18n.t('confirmLabel', {label}), {
@@ -30,7 +30,9 @@ module.exports = new WizardScene(
         })
 
         return ctx.wizard.next()
-      } 
+      } else {
+        await ctx.reply('Длина заголовка должна быть больше 2')
+      }
       return false
     } catch(e) {
       console.log(e);
