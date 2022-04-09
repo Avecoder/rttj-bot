@@ -18,6 +18,7 @@ module.exports = new WizardScene(
       })
 
       ctx.session.startMessageID = message_id
+      ctx.session.allTime = 0
 
 			return ctx.wizard.next()
     } catch(e) {
@@ -29,13 +30,16 @@ module.exports = new WizardScene(
       const data = ctx.update?.callback_query?.data
       // Проверяем, что начали занятие
       if(data === 'startLearn') {
-        ctx.session.first = new Date()
+        ctx.session.first = Date.now()
         await userController.changeActivity(ctx.from.id)
         // Выводим сообщение о завершении занятия
   			await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
           reply_markup: JSON.stringify({
             inline_keyboard: [
-              [{text: 'Закончить', callback_data: 'endLearn'}],
+              [
+                {text: 'Закончить', callback_data: 'endLearn'},
+                {text: 'Пауза', callback_data: 'pause'}
+              ],
               [{text: 'Вернуться назад', callback_data: 'back'}]
             ]
           })
@@ -63,22 +67,49 @@ module.exports = new WizardScene(
         return ctx.scene.enter('taskScenes')
       }
 
-      if(data === 'endLearn') {
-        const time = new Date()
+      if(data === 'pause') {
+        ctx.session.allTime += Date.now() - ctx.session.first
+        await ctx.editMessageText('Таймер поставлен на паузу.', {
+          reply_markup: JSON.stringify({
+            inline_keyboard: [
+              [{text: 'Продолжить', callback_data: 'continue'}],
+              [{text: 'Вернуться назад', callback_data: 'back'}]
+            ]
+          })
+        })
+        return false
+      }
 
-        const allTime = ((time - ctx.session.first) / (1000 * 60 * 60)).toFixed(1)
+      if(data === 'continue') {
+        ctx.session.first = Date.now()
+        await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
+          reply_markup: JSON.stringify({
+            inline_keyboard: [
+              [
+                {text: 'Закончить', callback_data: 'endLearn'},
+                {text: 'Пауза', callback_data: 'pause'}
+              ],
+              [{text: 'Вернуться назад', callback_data: 'back'}]
+            ]
+          })
+        })
+        return false
+      }
+
+      if(data === 'endLearn') {
+
+        ctx.session.allTime += (Date.now() - ctx.session.first)
 
         await userController.changeActivity(ctx.from.id)
 
+        const allTime = ctx.session.allTime / (1000 * 60 * 60)
 
-        // if(allTime < 0.5) {
-        //   await ctx.editMessageText(ctx.i18n.t('errorTask'))
-        //   await ctx.replyWithSticker('CAACAgIAAxkBAAEER41iP7tQ0thyzRpgD0Cn_M12nR5SVAACRA0AAlqPsUmvCoOB9MD71iME')
-        //   return ctx.scene.enter('taskScenes')
-        // }
-
-        ctx.session.allTime = allTime
-
+        if(allTime < 0.5) {
+          await ctx.editMessageText(ctx.i18n.t('errorTask'))
+          await ctx.replyWithSticker('CAACAgIAAxkBAAEER41iP7tQ0thyzRpgD0Cn_M12nR5SVAACRA0AAlqPsUmvCoOB9MD71iME')
+          return ctx.scene.enter('taskScenes')
+        }
+        ctx.session.allTime = 0
 
         return ctx.scene.enter('checkTaskToday')
       }
