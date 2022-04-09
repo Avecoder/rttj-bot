@@ -103,7 +103,7 @@ module.exports = new WizardScene(
 
         await userController.changeActivity(ctx.from.id)
 
-        ctx.session.allTime /= 1000 * 60 * 60
+        ctx.session.allTime = (ctx.session.allTime / (1000 * 60 * 60)).toFixed(1)
 
         if(ctx.session.allTime < 0.5) {
           await ctx.editMessageText(ctx.i18n.t('errorTask'))
