@@ -8,7 +8,7 @@ module.exports = new WizardScene(
   async ctx => {
     try {
       const {markup, taskToday} = await taskController.checkTaskToday(ctx)
-      console.log(markup)
+
       if(taskToday.length === 0)  return ctx.scene.enter('labelTask')
 
       markup.push([{text: 'Новое задание', callback_data: 'newTask'}])

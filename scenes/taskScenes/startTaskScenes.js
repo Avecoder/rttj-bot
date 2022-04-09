@@ -69,6 +69,7 @@ module.exports = new WizardScene(
 
       if(data === 'pause') {
         ctx.session.allTime += Date.now() - ctx.session.first
+
         await ctx.editMessageText('Таймер поставлен на паузу.', {
           reply_markup: JSON.stringify({
             inline_keyboard: [
@@ -102,14 +103,13 @@ module.exports = new WizardScene(
 
         await userController.changeActivity(ctx.from.id)
 
-        const allTime = ctx.session.allTime / (1000 * 60 * 60)
+        ctx.session.allTime /= 1000 * 60 * 60
 
-        if(allTime < 0.5) {
+        if(ctx.session.allTime < 0.5) {
           await ctx.editMessageText(ctx.i18n.t('errorTask'))
           await ctx.replyWithSticker('CAACAgIAAxkBAAEER41iP7tQ0thyzRpgD0Cn_M12nR5SVAACRA0AAlqPsUmvCoOB9MD71iME')
           return ctx.scene.enter('taskScenes')
         }
-        ctx.session.allTime = 0
 
         return ctx.scene.enter('checkTaskToday')
       }

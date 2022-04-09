@@ -45,7 +45,6 @@ module.exports = new WizardScene(
         return ctx.scene.reenter()
       }
 
-      console.log(ctx.session.allTime)
 
       if(data === 'yes') {
         await ctx.editMessageText(ctx.i18n.t('finalTask', {ctx}))
