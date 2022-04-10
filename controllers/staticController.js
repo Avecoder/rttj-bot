@@ -85,13 +85,14 @@ class StaticController {
   async dateStatic(ctx) {
     try {
       const res = await axios.get(`${process.env.mainUrl}/get-task-date/${ctx.from.id}/${dateAssets.dashDate(new Date())}`)
-      console.log(`${process.env.mainUrl}/get-task-date/${ctx.from.id}/${dateAssets.dashDate(new Date())}`)
+
       return res.data.map(item => {
         return {
           label: item.label,
           hours: (item.hours).toFixed(1),
           date: dateAssets.dMDate(item.date),
-          taskID: item.taskID
+          taskID: item.taskID,
+          isCompleted: item.isCompleted
         }
       })
     } catch (e) {
