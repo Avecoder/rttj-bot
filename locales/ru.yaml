@@ -137,7 +137,7 @@ userStatic: |
 
 friendStaticItem: |
   <b>${item.username}</b>
-  <b>${item.activity ? '♂Работает♂' : 'Чиллит'}</b>
+  <b>${item.activity}</b>
   🟢Текущая неделя: ${item.data[0]}ч.
   🔴Прошлая неделя: ${item.data[1]}ч.
   🕑Суммарное время: ${item.hours.toFixed(1)}ч.
@@ -148,7 +148,7 @@ todayStaticItem: |
 
 
 friendListItem: |
-  <b>${user.username} - ${user.activity ? '♂Работает♂' : 'Чиллит'}</b>
+  <b>${user.username} - ${user.activity}</b>
   Суммарное время: ${user.hours}ч.
   Статус: ${user.substatus}
 

@@ -31,7 +31,7 @@ module.exports = new WizardScene(
       // Проверяем, что начали занятие
       if(data === 'startLearn') {
         ctx.session.first = Date.now()
-        await userController.changeActivity(ctx.from.id)
+        await userController.changeActivity(ctx.from.id, '♂Ботает♂')
         // Выводим сообщение о завершении занятия
   			await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
           reply_markup: JSON.stringify({
@@ -63,12 +63,14 @@ module.exports = new WizardScene(
       const data = ctx.update?.callback_query?.data
       if(data === 'back') {
         await ctx.deleteMessage(ctx.session.startMessageID)
-        await userController.changeActivity(ctx.from.id)
+        await userController.changeActivity(ctx.from.id, 'Чиллит')
         return ctx.scene.enter('taskScenes')
       }
 
       if(data === 'pause') {
         ctx.session.allTime += Date.now() - ctx.session.first
+
+        await userController.changeActivity(ctx.from.id, 'Перекур')
 
         await ctx.editMessageText('Таймер поставлен на паузу.', {
           reply_markup: JSON.stringify({
@@ -83,6 +85,8 @@ module.exports = new WizardScene(
 
       if(data === 'continue') {
         ctx.session.first = Date.now()
+
+        await userController.changeActivity(ctx.from.id, '♂Ботает♂')
         await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
           reply_markup: JSON.stringify({
             inline_keyboard: [
@@ -101,7 +105,7 @@ module.exports = new WizardScene(
 
         ctx.session.allTime += (Date.now() - ctx.session.first)
 
-        await userController.changeActivity(ctx.from.id)
+        await userController.changeActivity(ctx.from.id, 'Чиллит')
 
         ctx.session.allTime = (ctx.session.allTime / (1000 * 60 * 60)).toFixed(1)
 

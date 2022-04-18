@@ -82,10 +82,11 @@ class UserController {
 		}
 	}
 
-	async changeActivity(userID) {
+	async changeActivity(userID, activityLabel) {
 		try {
 			await axios.post(`${process.env.mainUrl}/change-activity`, {
-				userID
+				userID,
+				activityLabel
 			})
 		} catch (e) {
 			console.log(e)
