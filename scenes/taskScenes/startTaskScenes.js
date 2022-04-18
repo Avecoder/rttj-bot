@@ -60,6 +60,9 @@ module.exports = new WizardScene(
   },
   async ctx => {
     try {
+      if(ctx.update?.message?.text) return false
+
+
       const data = ctx.update?.callback_query?.data
       if(data === 'back') {
         await ctx.deleteMessage(ctx.session.startMessageID)
