@@ -50,7 +50,6 @@ module.exports = new WizardScene(
           })
 
         })
-        return ctx.scene.reenter()
       }
 
       return false
