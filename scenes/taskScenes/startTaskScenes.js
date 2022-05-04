@@ -31,7 +31,7 @@ module.exports = new WizardScene(
       // Проверяем, что начали занятие
       if(data === 'startLearn') {
         ctx.session.first = Date.now()
-        await userController.changeActivity(ctx.from.id, '♂Ботает♂')
+        await userController.changeActivity(ctx.from.id, '♂Работает♂')
         // Выводим сообщение о завершении занятия
   			await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
           reply_markup: JSON.stringify({
@@ -89,7 +89,7 @@ module.exports = new WizardScene(
       if(data === 'continue') {
         ctx.session.first = Date.now()
 
-        await userController.changeActivity(ctx.from.id, '♂Ботает♂')
+        await userController.changeActivity(ctx.from.id, '♂Работает♂')
         await ctx.editMessageText(ctx.i18n.t('endLearn', {ctx}), {
           reply_markup: JSON.stringify({
             inline_keyboard: [
